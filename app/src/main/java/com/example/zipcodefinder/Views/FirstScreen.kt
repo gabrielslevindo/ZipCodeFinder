@@ -29,18 +29,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.zipcodefinder.Components.ButtonCuston
 import com.example.zipcodefinder.Components.OutlineTextFielCuston
-import com.example.zipcodefinder.Listners.APIResponse
+import com.example.zipcodefinder.Listners.APIResponseListners
+import com.example.zipcodefinder.ViewModel.APIViewModel
 import com.example.zipcodefinder.ui.theme.Green
 import com.example.zipcodefinder.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FirstScrenn(navController: NavController) {
+fun FirstScrenn(navController: NavController, viewModel:APIViewModel = hiltViewModel()) {
 
 
 
@@ -120,6 +119,36 @@ fun FirstScrenn(navController: NavController) {
 
                 ButtonCuston(
                     onClick = {
+
+
+                            viewModel.respostAPI(CEP, object : APIResponseListners{
+                                override fun onSucess(
+                                    logradouro: String,
+                                    bairro: String,
+                                    cidade: String,
+                                    estado: String
+                                ) {
+                                    Endereco = logradouro
+                                    Bairro = bairro
+                                    Cidade = cidade
+                                    Estado = estado
+
+
+                                    Toast.makeText(context,"CEP encontrado com sucesso." , Toast.LENGTH_SHORT).show()
+
+
+
+                                }
+
+                                override fun onFailure(error: String) {
+                                    Toast.makeText(context,"ERROR SERVER.." , Toast.LENGTH_SHORT).show()
+
+                                }
+
+
+                            })
+
+
 
 
 

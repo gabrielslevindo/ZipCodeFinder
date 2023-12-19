@@ -52,15 +52,7 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
-    }
-    kapt {
 
-        javacOptions {
-            // Definir a versão do Java para kapt
-            option("-source", JavaVersion.VERSION_1_8.toString())
-            option("-target", JavaVersion.VERSION_1_8.toString())
-            correctErrorTypes = true
-        }
 
 
     }

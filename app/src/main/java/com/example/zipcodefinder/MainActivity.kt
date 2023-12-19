@@ -8,6 +8,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.zipcodefinder.ViewModel.APIViewModel
 import com.example.zipcodefinder.Views.FirstScrenn
 import com.example.zipcodefinder.Views.SecondScreen
 import com.example.zipcodefinder.ui.theme.Green
@@ -24,13 +25,13 @@ class MainActivity : ComponentActivity() {
 
 
                 val navController = rememberNavController()
-            //    val viewModel: ViewModelAPI = hiltViewModel()
+                val viewModel: APIViewModel= hiltViewModel()
 
                 NavHost(navController = navController, startDestination = "FirstScreen") {
 
                     composable("FirstScreen") {
 
-                        FirstScrenn(navController)
+                        FirstScrenn(navController, viewModel)
 
 
                     }
