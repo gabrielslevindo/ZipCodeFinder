@@ -13,19 +13,10 @@ class APIViewModel@Inject constructor(private val repositorio: repository): View
 
     fun respostAPI(cep:String, listners: APIResponseListners){
 
-
         viewModelScope.launch {
-
 
             repositorio.APIRESPOST(cep,listners)
 
-
-
         }
-
-
-
     }
-
-
 }

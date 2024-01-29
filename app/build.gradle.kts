@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.model.Kapt
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-   id ("kotlin-kapt")
-   id ("com.google.dagger.hilt.android")
-    id ("org.jetbrains.kotlin.kapt")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 
@@ -52,7 +52,6 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
-
 
 
     }
@@ -102,7 +101,17 @@ dependencies {
 
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    kapt ("com.google.auto.service:auto-service:1.0-rc6")
+    kapt("com.google.auto.service:auto-service:1.0-rc6")
 
+
+    val room_version = "2.4.3"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // Constraints Layout
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 
 }

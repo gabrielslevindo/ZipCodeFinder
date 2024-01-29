@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,16 +35,30 @@ import com.example.zipcodefinder.Components.ButtonCuston
 import com.example.zipcodefinder.Components.OutlineTextFielCuston
 import com.example.zipcodefinder.Listners.APIResponseListners
 import com.example.zipcodefinder.ViewModel.APIViewModel
+import com.example.zipcodefinder.ViewModel.AddressViewModelRoom
+import com.example.zipcodefinder.data.local.AddressDao
+import com.example.zipcodefinder.data.local.AddressLocal
 import com.example.zipcodefinder.ui.theme.Green
 import com.example.zipcodefinder.ui.theme.White
 
+
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FirstScrenn(navController: NavController, viewModel:APIViewModel = hiltViewModel()) {
-
+fun FirstScrenn(
+    navController: NavController,
+    viewModel: APIViewModel = hiltViewModel(),
+    viewModelRoom: AddressViewModelRoom = hiltViewModel()
+) {
 
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val CEPList: MutableList<AddressLocal> = mutableListOf()
+
+
+
 
     var CEP by remember {
         mutableStateOf("")
@@ -121,7 +136,12 @@ fun FirstScrenn(navController: NavController, viewModel:APIViewModel = hiltViewM
                     onClick = {
 
 
-                            viewModel.respostAPI(CEP, object : APIResponseListners{
+
+
+
+
+
+                            viewModel.respostAPI(CEP, object : APIResponseListners {
                                 override fun onSucess(
                                     logradouro: String,
                                     bairro: String,
@@ -134,21 +154,43 @@ fun FirstScrenn(navController: NavController, viewModel:APIViewModel = hiltViewM
                                     Estado = estado
 
 
-                                    Toast.makeText(context,"CEP encontrado com sucesso." , Toast.LENGTH_SHORT).show()
+
+
+                                    if (Endereco == null || Bairro == null || Cidade == null || Estado == null ){
+
+                                        Toast.makeText(
+                                            context,
+                                            "CEP não encontrado.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+
+                                    }else{
+
+
+                                        Toast.makeText(
+                                            context,
+                                            "CEP encontrado com sucesso.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+
+                                    }
+
+
 
 
 
                                 }
 
                                 override fun onFailure(error: String) {
-                                    Toast.makeText(context,"ERROR SERVER.." , Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, error, Toast.LENGTH_SHORT)
+                                        .show()
 
                                 }
 
 
                             })
-
-
 
 
 
@@ -245,7 +287,31 @@ fun FirstScrenn(navController: NavController, viewModel:APIViewModel = hiltViewM
                 )
                 ButtonCuston(
 
-                    onClick = { },
+                    onClick = {
+
+
+                        if (CEP.isEmpty() || Endereco.isEmpty() || Bairro.isEmpty() || Cidade.isEmpty() || Estado.isEmpty()) {
+
+                            Toast.makeText(context, "Preencha todos os campos.", Toast.LENGTH_SHORT)
+                                .show()
+
+
+                        } else {
+
+
+                            Toast.makeText(context, "Cep Salvo com Sucesso.", Toast.LENGTH_SHORT)
+                                .show()
+                            navController.navigate("SecondScreen")
+                            // Lógica passar salvar os dados vindo da API no banco
+                            val address = AddressLocal(CEP,Endereco,Bairro,Cidade,Estado)
+                            CEPList.add(address)
+                            viewModelRoom.saveAddress(CEPList)
+
+
+                        }
+
+
+                    },
 
                     Text = "AVANÇAR",
 
@@ -270,7 +336,7 @@ fun FirstScrenn(navController: NavController, viewModel:APIViewModel = hiltViewM
 private fun previewFirst() {
 
 
- //   FirstScrenn(navController = rememberNavController(), viewModel = ViewModel)
+    //   FirstScrenn(navController = rememberNavController(), viewModel = ViewModel)
 
 
 }

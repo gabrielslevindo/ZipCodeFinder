@@ -10,6 +10,4 @@ interface APIResponse {
     @GET("ws/{cep}/json/")
     fun setAddress(@Path("cep") cep:String):Call<addressResponse>
 
-
-
 }
